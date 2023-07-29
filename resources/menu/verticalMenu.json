@@ -1,0 +1,25 @@
+{
+  "menu": [
+    {
+      "menuHeader": "Menu"
+    },
+    {
+      "name": "Dashboard",
+      "icon": "menu-icon tf-icons bx bx-chart",
+      "slug": "dashboard",
+      "url": "/dashboard"
+    },
+    {
+      "name": "Budget Estimates",
+      "icon": "menu-icon tf-icons bx bx-smile",
+      "slug": "employees-index",
+      "url": "/employees"
+    },
+    {
+      "name": "Users",
+      "icon": "menu-icon tf-icons bx bx-user",
+      "slug": "users-index",
+      "url": "/users"
+    }
+  ]
+}

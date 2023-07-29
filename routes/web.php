@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\Authentication\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -8,11 +10,31 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
 |
 */
 
+$controller_path = 'App\Http\Controllers';
+
 Route::get('/', function () {
-    return view('welcome');
+    return view('pages.dashboard.dashboards-analytics');
+});
+
+// authentication
+Route::middleware(['guest'])->group(function () {
+    Route::get('/login', [LoginController::class, 'index'])->name('auth-login');
+    Route::post('/login', [LoginController::class, 'authenticate'])->name('auth-authenticate');
+});
+// Route::get('/auth/register-basic', $controller_path . '\Authentication\RegisterBasic@index')->name('auth-register-basic');
+// Route::get('/auth/forgot-password-basic', $controller_path . '\Authentication\ForgotPasswordBasic@index')->name('auth-reset-password-basic');
+
+// Main Page Route
+Route::middleware(['auth'])->group(function() {
+    Route::get('/dashboard', [AnalyticsController::class, 'index'])->name('dashboard-analytics');
+    Route::get('/logout', [LoginController::class, 'logout'])->name('auth-logout');
+
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('users-index');
+    });
 });
