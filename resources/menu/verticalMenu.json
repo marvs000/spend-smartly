@@ -10,16 +10,69 @@
       "url": "/dashboard"
     },
     {
-      "name": "Budget Estimates",
-      "icon": "menu-icon tf-icons bx bx-smile",
-      "slug": "employees-index",
-      "url": "/employees"
+      "name": "Budget",
+      "icon": "menu-icon tf-icons bx bx-coin",
+      "slug": "budget",
+      "url": "/budget"
+    },
+    {
+      "name": "Income",
+      "icon": "menu-icon tf-icons bx bx-credit-card-front",
+      "slug": "users",
+      "submenu": [
+        {
+          "url": "/income/source",
+          "name": "Income Source",
+          "slug": "income-source"
+        },
+        {
+          "url": "/income/category",
+          "name": "Category Setup",
+          "slug": "income-category"
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "icon": "menu-icon tf-icons bx bx-food-menu",
+      "slug": "transactions",
+      "submenu": [
+        {
+          "url": "/transactions/source",
+          "name": "Logs",
+          "slug": "transactions-logs"
+        },
+        {
+          "url": "/transactions/category",
+          "name": "Category Setup",
+          "slug": "transactions-category"
+        }
+      ]
+    },
+    {
+      "menuHeader": "Admin"
     },
     {
       "name": "Users",
       "icon": "menu-icon tf-icons bx bx-user",
-      "slug": "users-index",
-      "url": "/users"
+      "slug": "users",
+      "submenu": [
+        {
+          "url": "/users",
+          "name": "Users List",
+          "slug": "list"
+        },
+        {
+          "url": "/users/roles",
+          "name": "Roles",
+          "slug": "roles"
+        },
+        {
+          "url": "/users/permission",
+          "name": "Permissions",
+          "slug": "permission"
+        }
+      ]
     }
   ]
 }
