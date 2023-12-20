@@ -5,12 +5,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="{{ asset('fonts/lawyer-gothic.ttf') }}" />
+<link href="https://db.onlinewebfonts.com/c/54bd6780e4d295ddc5890b366eb243fb?family=GothamRndSSm-Book" rel="stylesheet" type="text/css"/>
 
 <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/boxicons.css') }}" />
 
 <!-- Core CSS -->
 <link rel="stylesheet" href="{{ asset('assets/vendor/css/core.css') }}" />
-<link rel="stylesheet" href="{{ asset('assets/vendor/css/theme-default.css') }}" />
+<link rel="stylesheet" href="{{ asset('assets/vendor/css/theme-semi-dark.css') }}" />
 <link rel="stylesheet" href="{{ asset('assets/css/demo.css') }}" />
 
 <link rel="stylesheet" href="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />

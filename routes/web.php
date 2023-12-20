@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Authentication\LoginController;
+use App\Http\Controllers\IncomeCategoryController;
+use App\Http\Controllers\IncomeSourceController;
+use App\Http\Controllers\IncomeTypeController;
+use App\Http\Controllers\IncomeSetupController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +29,15 @@ Route::get('/', function () {
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('auth-login');
     Route::post('/login', [LoginController::class, 'authenticate'])->name('auth-authenticate');
+
+    Route::prefix('income')->group(function () {
+        Route::get('/source', [IncomeSourceController::class, 'index'])->name('income-source');
+        Route::get('/setup', [IncomeSetupController::class, 'index'])->name('income-setup');
+        // Route::prefix('setup')->group(function () {
+        //     Route::get('/category', [IncomeCategoryController::class, 'index'])->name('income-setup-category');
+        //     Route::get('/type', [IncomeTypeController::class, 'index'])->name('income-setup-type');
+        // });
+    });
 });
 // Route::get('/auth/register-basic', $controller_path . '\Authentication\RegisterBasic@index')->name('auth-register-basic');
 // Route::get('/auth/forgot-password-basic', $controller_path . '\Authentication\ForgotPasswordBasic@index')->name('auth-reset-password-basic');

@@ -1,13 +1,13 @@
 {
   "menu": [
     {
-      "menuHeader": "Menu"
-    },
-    {
       "name": "Dashboard",
       "icon": "menu-icon tf-icons bx bx-chart",
       "slug": "dashboard",
       "url": "/dashboard"
+    },
+    {
+      "menuHeader": "Menu"
     },
     {
       "name": "Budget",
@@ -18,17 +18,17 @@
     {
       "name": "Income",
       "icon": "menu-icon tf-icons bx bx-credit-card-front",
-      "slug": "users",
+      "slug": "income",
       "submenu": [
         {
           "url": "/income/source",
           "name": "Income Source",
-          "slug": "income-source"
+          "slug": "source"
         },
         {
-          "url": "/income/category",
-          "name": "Category Setup",
-          "slug": "income-category"
+          "url": "/income/setup",
+          "name": "Setup",
+          "slug": "setup"
         }
       ]
     },
