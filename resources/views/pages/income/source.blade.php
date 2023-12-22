@@ -8,7 +8,21 @@
 </h5>
 
 <!-- Responsive Table -->
-<div class="card">
+<div class="card ">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-2">
+                <h5 style="margin-top: 0.5rem; margin-bottom: 0.5rem;">Income Logs</h5>
+            </div>
+            <div class="col-md-10">
+                <div class="text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
+                    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd" aria-controls="offcanvasEnd">
+                        <i class="bx bx-plus me-0 me-sm-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="table-responsive text-nowrap" style="min-height: 500px;">
         <table class="table">
             <thead>
@@ -56,7 +70,7 @@
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-show-alt me-1"></i> View</a>
+                                    <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#add-income-logs"><i class="bx bx-show-alt me-1"></i> View</a>
                                 </div>
                             </div>
                         </td>
@@ -80,4 +94,51 @@
     </div>
 </div>
 <!--/ Responsive Table -->
+
+<!-- Modal -->
+<div class="modal fade" id="add-income-logs" data-bs-backdrop="static" tabindex="-1">
+  <div class="modal-dialog">
+    <form class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="add-income-logs-title">Add Income Logs</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col mb-3">
+            <label for="nameBackdrop" class="form-label">Name</label>
+            <input type="text" id="nameBackdrop" class="form-control" placeholder="Enter Name">
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col mb-0">
+            <label for="emailBackdrop" class="form-label">Email</label>
+            <input type="email" id="emailBackdrop" class="form-control" placeholder="xxxx@xxx.xx">
+          </div>
+          <div class="col mb-0">
+            <label for="dobBackdrop" class="form-label">DOB</label>
+            <input type="date" id="dobBackdrop" class="form-control" >
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- End Offcanvas -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEnd" aria-labelledby="offcanvasEndLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasEndLabel" class="offcanvas-title">Offcanvas End</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body my-auto mx-0 flex-grow-0">
+    <p class="text-center">Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs. The passage is attributed to an unknown typesetter in the 15th century who is thought to have scrambled parts of Cicero's De Finibus Bonorum et Malorum for use in a type specimen book.</p>
+    <button type="button" class="btn btn-primary mb-2 d-grid w-100">Continue</button>
+    <button type="button" class="btn btn-label-secondary d-grid w-100" data-bs-dismiss="offcanvas">Cancel</button>
+  </div>
+</div>
 @endsection

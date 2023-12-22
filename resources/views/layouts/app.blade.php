@@ -12,7 +12,7 @@
   <!-- laravel CRUD token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/nbdb-logo.png') }}" />
+  <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/logo.png') }}" />
 
   <!-- Include Styles -->
   @include('layouts/sections/styles')

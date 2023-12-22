@@ -23,12 +23,12 @@
         {
           "url": "/income/logs",
           "name": "Income Logs",
-          "slug": "logs"
+          "slug": "income-logs"
         },
         {
           "url": "/income/setup",
           "name": "Setup",
-          "slug": "setup"
+          "slug": "income-setup"
         }
       ]
     },
@@ -60,17 +60,17 @@
         {
           "url": "/users",
           "name": "Users List",
-          "slug": "list"
+          "slug": "users-list"
         },
         {
           "url": "/users/roles",
           "name": "Roles",
-          "slug": "roles"
+          "slug": "users-roles"
         },
         {
           "url": "/users/permission",
           "name": "Permissions",
-          "slug": "permission"
+          "slug": "users-permission"
         }
       ]
     }
