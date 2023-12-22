@@ -21,9 +21,9 @@
       "slug": "income",
       "submenu": [
         {
-          "url": "/income/source",
-          "name": "Income Source",
-          "slug": "source"
+          "url": "/income/logs",
+          "name": "Income Logs",
+          "slug": "logs"
         },
         {
           "url": "/income/setup",

@@ -2,12 +2,32 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\IncomeType;
+use App\Models\IncomeCategory;
+use App\Models\ActualIncomeBreakdown;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class IncomeSource extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    public function actual_incomes(): HasMany
+    {
+        return $this->hasMany(ActualIncomeBreakdown::class);
+    }
+
+    public function category(): HasOne
+    {
+        return $this->hasOne(IncomeCategory::class, 'id', 'income_category');
+    }
+
+    public function type(): HasOne
+    {
+        return $this->hasOne(IncomeType::class, 'id', 'income_type');
+    }
 }

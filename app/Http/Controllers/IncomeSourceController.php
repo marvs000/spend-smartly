@@ -9,7 +9,7 @@ class IncomeSourceController extends Controller
 {
     public function index()
     {
-        $sources = IncomeSource::paginate(10);
+        $sources = IncomeSource::withSum('actual_incomes', 'amount')->paginate(10);
 
         return view('pages.income.source', [ 'sources' => $sources ]);
     }

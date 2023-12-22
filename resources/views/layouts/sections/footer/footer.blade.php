@@ -10,7 +10,7 @@
           target="_blank" 
           class="footer-link fw-bolder ms-1"
           style="font-family: 'Lawyer Gothic'; color: #870058;"
-      >SPEND SMARTLY APP</a>
+      >SPEND SMART APP</a>
     </div>
   </div>
 </footer>

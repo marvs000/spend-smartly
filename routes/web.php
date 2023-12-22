@@ -31,7 +31,7 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/login', [LoginController::class, 'authenticate'])->name('auth-authenticate');
 
     Route::prefix('income')->group(function () {
-        Route::get('/source', [IncomeSourceController::class, 'index'])->name('income-source');
+        Route::get('/logs', [IncomeSourceController::class, 'index'])->name('income-logs');
         Route::get('/setup', [IncomeSetupController::class, 'index'])->name('income-setup');
         // Route::prefix('setup')->group(function () {
         //     Route::get('/category', [IncomeCategoryController::class, 'index'])->name('income-setup-category');
