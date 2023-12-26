@@ -5,6 +5,7 @@
 @section('vendor-style')
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
 @endsection
 
 @section('vendor-script')
@@ -12,6 +13,7 @@
     <script src="{{ asset('assets/vendor/libs/cleavejs/cleave.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/cleavejs/cleave-phone.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
 @endsection
 
 @section('content')
@@ -23,10 +25,14 @@
     <div class="card ">
         <div class="card-header">
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-4 col-10">
+
+
                     <h5 style="margin-top: 0.5rem; margin-bottom: 0.5rem;">Income Logs</h5>
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-8 col-2">
+
+
                     <div
                         class="text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
                         <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#addLog"
@@ -80,7 +86,7 @@
                             <td>&#8369; {{ number_format($source->actual_incomes_sum_amount) }}</td>
                             <td>&#8369; {{ number_format($source->actual_incomes_sum_amount) }}</td>
                             <!-- <td>{{ \Carbon\Carbon::parse($source->created_at)->format('M. d, Y H:i:s') }}</td>
-                                                            <td>{{ \Carbon\Carbon::parse($source->updated_at)->format('M. d, Y H:i:s') }}</td> -->
+                                                                        <td>{{ \Carbon\Carbon::parse($source->updated_at)->format('M. d, Y H:i:s') }}</td> -->
                             <td class="text-center">
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
@@ -146,13 +152,13 @@
         </div>
     </div>
 
-    <!-- End Offcanvas -->
+    <!-- Offcanvas -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="addLog" aria-labelledby="addLogLabel">
         <div class="offcanvas-header">
             <h5 id="addLogLabel" class="offcanvas-title">Add New Income Log</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-        <div class="offcanvas-body mx-0 flex-grow-0">
+        <div class="offcanvas-body mx-0 flex-grow-0" id="add-log-body">
             <form id="addNewLogForm" class="add-log needs-validation" novalidate>
                 <div class="mb-3">
                     <label class="form-label" for="bs-validation-date">Income Date</label>
@@ -163,35 +169,43 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="bs-validation-category">Category</label>
-                    <select class="form-select" id="bs-validation-category" required>
-                        <option value="" disabled selected>Select Category</option>
-                        <option value="Marvin">Marvin</option>
-                        <option value="Cristel">Cristel</option>
+                    <select class="form-select select2" id="bs-validation-category" required>
+                        <option disabled selected>Select Category</option>
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->title }}</option>
+                        @endforeach
                     </select>
                     <div class="valid-feedback"> Looks good! </div>
                     <div class="invalid-feedback"> Please select any Category </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="bs-validation-type">Income Type</label>
-                    <select class="form-select" id="bs-validation-type" required>
+                    <select class="form-select select2" id="bs-validation-type" required>
                         <option value="" disabled selected>Select Income Type</option>
-                        <option value="Salary">Salary</option>
-                        <option value="Bonus">Bonus</option>
+                        @foreach ($types as $type)
+                            <option value="{{ $type->id }}">{{ $type->title }}</option>
+                        @endforeach
                     </select>
                     <div class="valid-feedback"> Looks good! </div>
                     <div class="invalid-feedback"> Please select any Income Type </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="bs-validation-expected">Expected Amount</label>
-                    <input class="form-control numeral-mask numeral-maxlength" type="text" id="bs-validation-expected"
-                        placeholder="Enter Numeral" maxlength="10" />
+                    <div class="input-group">
+                        <span class="input-group-text">&#8369;</span>
+                        <input class="form-control numeral-mask numeral-maxlength" type="text" id="bs-validation-expected"
+                            placeholder="Enter Expected Amount" maxlength="10" autocomplete="off" />
+                    </div>
                     <div class="valid-feedback"> Looks good! </div>
                     <div class="invalid-feedback"> Please Enter Expected Amount </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="bs-validation-actual">Actual Amount</label>
-                    <input class="form-control numeral-mask numeral-maxlength" type="text" id="bs-validation-actual"
-                        placeholder="Enter Numeral" maxlength="10" />
+                    <div class="input-group">
+                        <span class="input-group-text">&#8369;</span>
+                        <input class="form-control numeral-mask numeral-maxlength" type="text" id="bs-validation-actual"
+                            placeholder="Enter Actual Amount" maxlength="10" autocomplete="off" />
+                    </div>
                     <div class="valid-feedback"> Looks good! </div>
                     <div class="invalid-feedback"> Please Enter Actual Amount </div>
                 </div>
@@ -240,16 +254,21 @@
         });
     </script>
 
-    <!-- Numeral Masking -->
+    <!-- Numeral Fields Masking -->
     <script>
-        new Cleave(".numeral-mask", {
-            numeral: true,
-            numeralThousandsGroupStyle: "thousand"
+        var numeralCollection = document.getElementsByClassName("numeral-mask");
+        var numeralFields = Array.from(numeralCollection);
+
+        numeralFields.forEach(function(fields) {
+            new Cleave(fields, {
+                numeral: true,
+                numeralThousandsGroupStyle: "thousand"
+            })
         });
 
         $(".numeral-maxlength").each(function() {
             $(this).maxlength({
-                warningClass: "label label-primary bg-primary text-white",
+                warningClass: "label label-info bg-info text-white",
                 limitReachedClass: "label label-danger",
                 separator: " out of ",
                 preText: "You typed ",
@@ -257,6 +276,24 @@
                 validate: true,
                 threshold: +this.getAttribute("maxlength")
             });
+        });
+    </script>
+
+    <!-- Date Fields Masking -->
+    <script>
+        new Cleave(".date-mask", {
+            date: true,
+            delimiter: "-",
+            datePattern: ["Y", "m", "d"]
+        });
+    </script>
+
+    <!-- Initialize Select2 -->
+    <script>
+        $(".select2").select2({
+            dropdownParent: $('#add-log-body'),
+            width: '300px',
+            height: '34px',
         });
     </script>
 @endsection
