@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css') }}">
 @endsection
 
 @section('vendor-script')
@@ -14,6 +17,8 @@
     <script src="{{ asset('assets/vendor/libs/cleavejs/cleave-phone.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/moment/moment.js') }}"></script>
 @endsection
 
 @section('content')
@@ -31,8 +36,6 @@
                     <h5 style="margin-top: 0.5rem; margin-bottom: 0.5rem;">Income Logs</h5>
                 </div>
                 <div class="col-md-8 col-2">
-
-
                     <div
                         class="text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
                         <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#addLog"
@@ -43,8 +46,8 @@
                 </div>
             </div>
         </div>
-        <div class="table-responsive text-nowrap" style="min-height: 500px;">
-            <table class="table">
+        <div class="table-responsive text-nowrap container" style="min-height: 500px;">
+            <table class="table" id="incomeLogTable">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -62,7 +65,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($sources as $source)
+                    {{-- @forelse($sources as $source)
                         @php
                             $diff = $source->expected_income - $source->actual_incomes_sum_amount;
                         @endphp
@@ -103,18 +106,18 @@
                         <tr>
                             <td colspan="10" class="text-center">No Records Found</td>
                         </tr>
-                    @endforelse
+                    @endforelse --}}
                 </tbody>
             </table>
         </div>
 
-        <div class="mx-3 mt-4">
+        {{-- <div class="mx-3 mt-4">
             <div class="d-flex float-end">
                 @if (count($sources))
                     {{ $sources->links() }}
                 @endif
             </div>
-        </div>
+        </div> --}}
     </div>
     <!--/ Responsive Table -->
 
@@ -291,9 +294,72 @@
     <!-- Initialize Select2 -->
     <script>
         $(".select2").select2({
-            dropdownParent: $('#add-log-body'),
-            width: '300px',
-            height: '34px',
+            dropdownParent: $('#add-log-body')
         });
+    </script>
+
+    <!-- Datatable -->
+    <script>
+        const numberFormatter = new Intl.NumberFormat('en-US', {
+            style: 'decimal',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        $('#incomeLogTable').DataTable({
+            processing: true,
+            serverSide: true,
+            "order": [[ 1, "asc" ]],
+            ajax: window.location.pathname,
+            columns: [
+                { data: 'id', name: 'id' },
+                { 
+                    data: 'income_date', 
+                    render: function (data, type, row) {
+                        return `<td>${moment(data).format("MMM. D, Y")}</td>`
+                    }
+                },
+                { data: 'category', name: 'category.title' },
+                { data: 'type', name: 'type.title' },
+                { 
+                    data: 'expected_income', 
+                    render: function (data, type, row) {
+                        return `<td>&#8369; ${numberFormatter.format(data)}</td>`
+                    }
+                },
+                { 
+                    data: 'actual_incomes_sum_amount', 
+                    render: function (data, type, row) {
+                        return `<td>&#8369; ${numberFormatter.format(data)}</td>`
+                    }
+                },
+                { 
+                    data: 'diff', 
+                    render: function (data, type, row) {
+                        let diff = row.expected_income - row.actual_incomes_sum_amount;
+                        if (diff >= 0) {
+                            return `<div class="d-flex align-items-center lh-1 me-3 mb-3 mb-sm-0">
+                                <span class="badge badge-dot bg-success me-1"></span> &#8369;
+                                ${numberFormatter.format(diff)}
+                            </div>`
+                        } else {
+                            return  `<span class="badge bg-label-danger">&#8369; ${numberFormatter.format(diff)}</span>`
+                        }
+                    }
+                },
+                { 
+                    data: 'final', 
+                    render: function (data, type, row) {
+                        return `<td>&#8369; ${numberFormatter.format(row.actual_incomes_sum_amount)}</td>`
+                    }
+                },
+                { 
+                    data: 'remaining', 
+                    render: function (data, type, row) {
+                        return `<td>&#8369; ${numberFormatter.format(row.actual_incomes_sum_amount)}</td>`
+                    }
+                },
+                { data: 'action', name: 'action'},
+            ]
+        })
     </script>
 @endsection
