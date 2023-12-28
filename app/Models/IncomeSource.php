@@ -16,6 +16,14 @@ class IncomeSource extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'income_date',
+        'income_category',
+        'income_type',
+        'expected_income',
+        'actual_income',
+    ];
+
     public function actual_incomes(): HasMany
     {
         return $this->hasMany(ActualIncomeBreakdown::class);

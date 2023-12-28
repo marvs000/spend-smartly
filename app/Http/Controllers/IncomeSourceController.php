@@ -7,38 +7,15 @@ use App\Models\IncomeType;
 use Illuminate\Http\Request;
 use App\Models\IncomeSource;
 use App\Models\IncomeCategory;
-
+use App\Models\ActualIncomeBreakdown;
+use App\Http\Services\IncomeSourceService;
 
 class IncomeSourceController extends Controller
 {
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $model = IncomeSource::with('category')
-                ->with('type')
-                ->withSum('actual_incomes', 'amount')
-                ->get();
-
-            return DataTables::of($model)
-                ->addColumn('category', function (IncomeSource $source) {
-                    return $source->category->title;
-                })
-                ->addColumn('type', function (IncomeSource $source) {
-                    return $source->type->title;
-                })
-                ->addColumn('action', function ($row) {
-                    $actions = '
-                        <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
-                                    data-bs-target="#add-income-logs" data-id="'. $row->id .'"><i class="bx bx-show-alt me-1"></i> View</a>
-                            </div>
-                        </div>';
-                    return $actions;
-                })
-                ->toJson();
+            return (new IncomeSourceService())->incomeSourceDatatable();
         }
 
         $categories = IncomeCategory::all();
@@ -48,5 +25,19 @@ class IncomeSourceController extends Controller
             'categories' => $categories,
             'types'      => $types,
         ]);
+    }
+
+    public function store(Request $request)
+    {
+        $income_source_inputs = $request->except(['actual_income']);
+        $source = IncomeSource::create($income_source_inputs);
+
+        $actual_income_input = $request->only(['actual_income']);
+        $actual_income = ActualIncomeBreakdown::create([
+            'income_source_id' => $source->id,
+            'amount' => $actual_income_input['actual_income'],
+        ]);
+
+        return response()->json([ 'result' => $source ]);
     }
 }

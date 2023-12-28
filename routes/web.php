@@ -31,7 +31,13 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/login', [LoginController::class, 'authenticate'])->name('auth-authenticate');
 
     Route::prefix('income')->group(function () {
-        Route::get('/logs', [IncomeSourceController::class, 'index'])->name('income-logs');
+        Route::prefix('logs')->group(function () {
+            Route::get('/', [IncomeSourceController::class, 'index'])->name('income-logs');
+            Route::post('/store', [IncomeSourceController::class, 'store'])->name('income-logs-store');
+            Route::get('/edit', [IncomeSourceController::class, 'edit'])->name('income-logs-edit');
+            Route::put('/update', [IncomeSourceController::class, 'update'])->name('income-logs-update');
+            Route::delete('/delete', [IncomeSourceController::class, 'delete'])->name('income-logs-delete');
+        });
         Route::get('/setup', [IncomeSetupController::class, 'index'])->name('income-setup');
         // Route::prefix('setup')->group(function () {
         //     Route::get('/category', [IncomeCategoryController::class, 'index'])->name('income-setup-category');

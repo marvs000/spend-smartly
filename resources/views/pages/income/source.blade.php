@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
 @endsection
 
 @section('vendor-script')
@@ -19,6 +20,15 @@
     <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/moment/moment.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
+@endsection
+
+@section('page-style')
+    <style>
+        td {
+            font-size: 0.9rem;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -36,12 +46,14 @@
                     <h5 style="margin-top: 0.5rem; margin-bottom: 0.5rem;">Income Logs</h5>
                 </div>
                 <div class="col-md-8 col-2">
-                    <div
-                        class="text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
-                        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#addLog"
+                    <div class="text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
+                        <div data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
+                        title="<i class='bx bx-plus bx-xs' ></i> <span>Log Income</span>">
+                        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#incomeLogOffcanvas"
                             aria-controls="addLog">
-                            <i class="bx bx-plus me-0 me-sm-1"></i>
+                            <i class="bx bx-plus mb-1"></i>
                         </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -156,23 +168,24 @@
     </div>
 
     <!-- Offcanvas -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="addLog" aria-labelledby="addLogLabel">
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="incomeLogOffcanvas" aria-labelledby="addLogLabel">
         <div class="offcanvas-header">
             <h5 id="addLogLabel" class="offcanvas-title">Add New Income Log</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body mx-0 flex-grow-0" id="add-log-body">
             <form id="addNewLogForm" class="add-log needs-validation" novalidate>
+                @csrf
                 <div class="mb-3">
                     <label class="form-label" for="bs-validation-date">Income Date</label>
                     <input type="text" class="form-control flatpickr-validation date-mask" id="bs-validation-date"
-                        placeholder=" yyyy-MM-dd" required />
+                        placeholder=" yyyy-MM-dd" name="income_date" autocomplete="off" required />
                     <div class="valid-feedback"> Looks good! </div>
                     <div class="invalid-feedback"> Please Enter Income Date </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="bs-validation-category">Category</label>
-                    <select class="form-select select2" id="bs-validation-category" required>
+                    <select class="form-select select2" id="bs-validation-category" name="income_category" required>
                         <option disabled selected>Select Category</option>
                         @foreach ($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->title }}</option>
@@ -183,7 +196,7 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="bs-validation-type">Income Type</label>
-                    <select class="form-select select2" id="bs-validation-type" required>
+                    <select class="form-select select2" id="bs-validation-type" name="income_type" required>
                         <option value="" disabled selected>Select Income Type</option>
                         @foreach ($types as $type)
                             <option value="{{ $type->id }}">{{ $type->title }}</option>
@@ -193,24 +206,26 @@
                     <div class="invalid-feedback"> Please select any Income Type </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="bs-validation-expected">Expected Amount</label>
+                    <label class="form-label" for="bs-validation-expected">Expected Income</label>
                     <div class="input-group">
                         <span class="input-group-text">&#8369;</span>
-                        <input class="form-control numeral-mask numeral-maxlength" type="text" id="bs-validation-expected"
-                            placeholder="Enter Expected Amount" maxlength="10" autocomplete="off" />
+                        <input class="form-control numeral-mask numeral-maxlength" type="text"
+                            id="bs-validation-expected" placeholder="Enter Expected Income" maxlength="10"
+                            autocomplete="off" name="expected_income" />
                     </div>
                     <div class="valid-feedback"> Looks good! </div>
-                    <div class="invalid-feedback"> Please Enter Expected Amount </div>
+                    <div class="invalid-feedback"> Please Enter Expected Income </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="bs-validation-actual">Actual Amount</label>
+                    <label class="form-label" for="bs-validation-actual">Actual Income</label>
                     <div class="input-group">
                         <span class="input-group-text">&#8369;</span>
-                        <input class="form-control numeral-mask numeral-maxlength" type="text" id="bs-validation-actual"
-                            placeholder="Enter Actual Amount" maxlength="10" autocomplete="off" />
+                        <input class="form-control numeral-mask numeral-maxlength" type="text"
+                            id="bs-validation-actual" placeholder="Enter Actual Income" maxlength="10"
+                            autocomplete="off" name="actual_income" />
                     </div>
                     <div class="valid-feedback"> Looks good! </div>
-                    <div class="invalid-feedback"> Please Enter Actual Amount </div>
+                    <div class="invalid-feedback"> Please Enter Actual Income </div>
                 </div>
                 <div class="row">
                     <div class="col-12 d-grid gap-2">
@@ -223,143 +238,9 @@
 @endsection
 
 @section('page-script')
-    <!-- Bootstrap Validation -->
-    <script>
-        // Flat pickr
-        const flatPickrEL = $(".flatpickr-validation");
-        if (flatPickrEL.length) {
-            flatPickrEL.flatpickr({
-                allowInput: true,
-                monthSelectorType: "static"
-            });
-        }
+    <!-- Init Plugins Scripts -->
+    <script src="{{ asset('js/custom/income/income-logs-init.js') }}"></script>
 
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        var bsValidationForms = document.querySelectorAll(".needs-validation");
-
-        // Loop over them and prevent submission
-        Array.prototype.slice.call(bsValidationForms).forEach(function(form) {
-            form.addEventListener(
-                "submit",
-                function(event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    } else {
-                        // Submit your form
-                        alert("Submitted!!!");
-                    }
-
-                    form.classList.add("was-validated");
-                },
-                false
-            );
-        });
-    </script>
-
-    <!-- Numeral Fields Masking -->
-    <script>
-        var numeralCollection = document.getElementsByClassName("numeral-mask");
-        var numeralFields = Array.from(numeralCollection);
-
-        numeralFields.forEach(function(fields) {
-            new Cleave(fields, {
-                numeral: true,
-                numeralThousandsGroupStyle: "thousand"
-            })
-        });
-
-        $(".numeral-maxlength").each(function() {
-            $(this).maxlength({
-                warningClass: "label label-info bg-info text-white",
-                limitReachedClass: "label label-danger",
-                separator: " out of ",
-                preText: "You typed ",
-                postText: " digits available.",
-                validate: true,
-                threshold: +this.getAttribute("maxlength")
-            });
-        });
-    </script>
-
-    <!-- Date Fields Masking -->
-    <script>
-        new Cleave(".date-mask", {
-            date: true,
-            delimiter: "-",
-            datePattern: ["Y", "m", "d"]
-        });
-    </script>
-
-    <!-- Initialize Select2 -->
-    <script>
-        $(".select2").select2({
-            dropdownParent: $('#add-log-body')
-        });
-    </script>
-
-    <!-- Datatable -->
-    <script>
-        const numberFormatter = new Intl.NumberFormat('en-US', {
-            style: 'decimal',
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
-        $('#incomeLogTable').DataTable({
-            processing: true,
-            serverSide: true,
-            "order": [[ 1, "asc" ]],
-            ajax: window.location.pathname,
-            columns: [
-                { data: 'id', name: 'id' },
-                { 
-                    data: 'income_date', 
-                    render: function (data, type, row) {
-                        return `<td>${moment(data).format("MMM. D, Y")}</td>`
-                    }
-                },
-                { data: 'category', name: 'category.title' },
-                { data: 'type', name: 'type.title' },
-                { 
-                    data: 'expected_income', 
-                    render: function (data, type, row) {
-                        return `<td>&#8369; ${numberFormatter.format(data)}</td>`
-                    }
-                },
-                { 
-                    data: 'actual_incomes_sum_amount', 
-                    render: function (data, type, row) {
-                        return `<td>&#8369; ${numberFormatter.format(data)}</td>`
-                    }
-                },
-                { 
-                    data: 'diff', 
-                    render: function (data, type, row) {
-                        let diff = row.expected_income - row.actual_incomes_sum_amount;
-                        if (diff >= 0) {
-                            return `<div class="d-flex align-items-center lh-1 me-3 mb-3 mb-sm-0">
-                                <span class="badge badge-dot bg-success me-1"></span> &#8369;
-                                ${numberFormatter.format(diff)}
-                            </div>`
-                        } else {
-                            return  `<span class="badge bg-label-danger">&#8369; ${numberFormatter.format(diff)}</span>`
-                        }
-                    }
-                },
-                { 
-                    data: 'final', 
-                    render: function (data, type, row) {
-                        return `<td>&#8369; ${numberFormatter.format(row.actual_incomes_sum_amount)}</td>`
-                    }
-                },
-                { 
-                    data: 'remaining', 
-                    render: function (data, type, row) {
-                        return `<td>&#8369; ${numberFormatter.format(row.actual_incomes_sum_amount)}</td>`
-                    }
-                },
-                { data: 'action', name: 'action'},
-            ]
-        })
-    </script>
+    <!-- Transactional Script -->
+    <script src="{{ asset('js/custom/income/income-logs.js') }}"></script>
 @endsection
