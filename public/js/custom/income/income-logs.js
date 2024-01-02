@@ -6,73 +6,83 @@ const numberFormatter = new Intl.NumberFormat('en-US', {
 });
 const incomeLogTable = $('#incomeLogTable')
 
-incomeLogTable.DataTable({
+let incomeLogDataTable = incomeLogTable.DataTable({
     processing: true,
     serverSide: true,
     "order": [
         [1, "asc"]
     ],
-    ajax: window.location.pathname,
-    columns: [{
-        data: 'id',
-        name: 'id'
-    },
-    {
-        data: 'income_date',
-        render: function (data, type, row) {
-            return `<td>${moment(data).format("MMM. D, Y")}</td>`
+    ajax: {
+        url: window.location.pathname,
+        data: function (d) {
+          return $.extend({}, d, {
+            "month": $("#month").val(),
+            "year": $("#year").val()
+          });
         }
     },
-    {
-        data: 'category',
-        name: 'category.title'
-    },
-    {
-        data: 'type',
-        name: 'type.title'
-    },
-    {
-        data: 'expected_income',
-        render: function (data, type, row) {
-            return `<td>&#8369; ${numberFormatter.format(data)}</td>`
-        }
-    },
-    {
-        data: 'actual_incomes_sum_amount',
-        render: function (data, type, row) {
-            return `<td>&#8369; ${numberFormatter.format(data)} 
-                    <button class="btn btn-light btn-sm"><i class="bx bx-plus mb-2"></button></td>`
-        }
-    },
-    {
-        data: 'diff',
-        render: function (data, type, row) {
-            let diff = row.actual_incomes_sum_amount - row.expected_income;
-            if (diff >= 0) {
-                return `<span class="badge bg-success">&#8369; ${numberFormatter.format(diff)}</span>`
-            } else {
-                return `<span class="badge bg-label-danger">&#8369; ${numberFormatter.format(diff)}</span>`
+    columns: [
+        {
+            data: 'id',
+            name: 'id'
+        },
+        {
+            data: 'income_date',
+            render: function (data, type, row) {
+                return `<td>${moment(data).format("MMM. D, Y")}</td>`
             }
-        }
-    },
-    {
-        data: 'final',
-        render: function (data, type, row) {
-            return `<td>&#8369; ${numberFormatter.format(row.actual_incomes_sum_amount)}</td>`
-        }
-    },
-    {
-        data: 'remaining',
-        render: function (data, type, row) {
-            return `<td>&#8369; ${numberFormatter.format(row.actual_incomes_sum_amount)}</td>`
-        }
-    },
-    {
-        data: 'action',
-        name: 'action'
-    },
-    ]
+        },
+        {
+            data: 'category',
+            name: 'category.title'
+        },
+        {
+            data: 'type',
+            name: 'type.title'
+        },
+        {
+            data: 'expected_income',
+            render: function (data, type, row) {
+                return `<td>&#8369; ${numberFormatter.format(data)}</td>`
+            }
+        },
+        {
+            data: 'actual_incomes_sum_amount',
+            render: function (data, type, row) {
+                return `<td>&#8369; ${numberFormatter.format(data)}</td>`
+            }
+        },
+        {
+            data: 'diff',
+            render: function (data, type, row) {
+                let diff = row.actual_incomes_sum_amount - row.expected_income;
+                if (diff >= 0) {
+                    return `<span class="badge py-2 px-2 bg-success">&#8369; ${numberFormatter.format(diff)}</span>`
+                } else {
+                    return `<span class="badge py-2 px-2 bg-label-danger">&#8369; ${numberFormatter.format(diff)}</span>`
+                }
+            }
+        },
+        {
+            data: 'action',
+            name: 'action'
+        },
+    ],
+    fnDrawCallback: function(oSettings) {
+        const actionTooltipTriggerList = document.querySelectorAll('.action-tooltip')
+        const actionTooltipList = [...actionTooltipTriggerList].map(actionTooltipTriggerEl => new bootstrap.Tooltip(actionTooltipTriggerEl))
+    }
 })
+
+$(document).ready(function(){
+    // Redraw the table
+    incomeLogDataTable.draw();
+    
+    // Redraw the table based on the custom input
+    $('#year, #month').bind("keyup change", function(){
+        incomeLogDataTable.draw();
+    });
+});
 
 /**
  * Submit Add Income Log Form

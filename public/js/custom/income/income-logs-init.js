@@ -56,11 +56,44 @@ $(".select2").select2({
     dropdownParent: $('#add-log-body')
 });
 
+
 /**
  * Tooltip
  * 
  * */ 
-var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new Tooltip(tooltipTriggerEl);
+// var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+// var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+//     return new Tooltip(tooltipTriggerEl);
+// });
+
+/**
+ * Form Repeater
+ * 
+ */
+var formRepeater = $(".form-repeater");
+
+var row = 2;
+var col = 1;
+formRepeater.on('submit', function(e) {
+  e.preventDefault();
+});
+formRepeater.repeater({
+  show: function() {
+    var formControl = $(this).find('.form-control, .form-select');
+    var formLabel = $(this).find('.form-label');
+
+    formControl.each(function(i) {
+      var id = 'form-repeater-' + row + '-' + col;
+      $(formControl[i]).attr('id', id);
+      $(formLabel[i]).attr('for', id);
+      col++;
+    });
+
+    row++;
+
+    $(this).slideDown();
+  },
+  hide: function(e) {
+    $(this).slideUp(e)
+  }
 });

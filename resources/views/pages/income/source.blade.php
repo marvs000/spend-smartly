@@ -21,6 +21,7 @@
     <script src="{{ asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/moment/moment.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/jquery-repeater/jquery-repeater.js') }}"></script>
 @endsection
 
 @section('page-style')
@@ -38,21 +39,52 @@
 
     <!-- Responsive Table -->
     <div class="card ">
-        <div class="card-header">
+        {{-- <div class="card-header">
+            
             <div class="row">
                 <div class="col-md-4 col-10">
-
-
                     <h5 style="margin-top: 0.5rem; margin-bottom: 0.5rem;">Income Logs</h5>
                 </div>
                 <div class="col-md-8 col-2">
-                    <div class="text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
+                    <div
+                        class="text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
                         <div data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
-                        title="<i class='bx bx-plus bx-xs' ></i> <span>Log Income</span>">
-                        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#incomeLogOffcanvas"
-                            aria-controls="addLog">
-                            <i class="bx bx-plus mb-1"></i>
-                        </button>
+                            title="<i class='bx bx-plus bx-xs' ></i> <span>Log Income</span>">
+                            <button class="btn btn-primary add-log" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#incomeLogOffcanvas" aria-controls="addLog">
+                                <i class="bx bx-plus mb-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
+
+        <div class="card-header border-bottom mb-4">
+            {{-- <h5 class="card-title">Filter</h5> --}}
+            <div class="d-flex justify-content-between align-items-center row gap-4 gap-md-0">
+                <div class="col-md-3 user_plan">
+                    <select id="month" class="form-select text-capitalize">
+                        <option value="1" selected>January</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+                <div class="col-md-2 user_role">
+                    <select id="year" class="form-select text-capitalize">
+                        <option value="2024" selected>2024</option>
+                        <option value="2023">2023</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-7 col-2">
+                    <div
+                        class="text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
+                        <div data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
+                            title="<i class='bx bx-plus bx-xs' ></i> <span>Log Income</span>">
+                            <button class="btn btn-primary add-log" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#incomeLogOffcanvas" aria-controls="addLog">
+                                <i class="bx bx-plus mb-1"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -69,11 +101,7 @@
                         <th>Expected</th>
                         <th>Actual</th>
                         <th>Diff</th>
-                        <th>Final</th>
-                        <th>Remaining</th>
-                        <th class="text-center" title="Actions">
-                            <i class="bx bx-menu"></i>
-                        </th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -133,41 +161,7 @@
     </div>
     <!--/ Responsive Table -->
 
-    <!-- Modal -->
-    <div class="modal fade" id="add-income-logs" data-bs-backdrop="static" tabindex="-1">
-        <div class="modal-dialog">
-            <form class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="add-income-logs-title">Add Income Logs</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col mb-3">
-                            <label for="nameBackdrop" class="form-label">Name</label>
-                            <input type="text" id="nameBackdrop" class="form-control" placeholder="Enter Name">
-                        </div>
-                    </div>
-                    <div class="row g-2">
-                        <div class="col mb-0">
-                            <label for="emailBackdrop" class="form-label">Email</label>
-                            <input type="email" id="emailBackdrop" class="form-control" placeholder="xxxx@xxx.xx">
-                        </div>
-                        <div class="col mb-0">
-                            <label for="dobBackdrop" class="form-label">DOB</label>
-                            <input type="date" id="dobBackdrop" class="form-control">
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Offcanvas -->
+    <!-- Income Log Offcanvas -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="incomeLogOffcanvas" aria-labelledby="addLogLabel">
         <div class="offcanvas-header">
             <h5 id="addLogLabel" class="offcanvas-title">Add New Income Log</h5>
@@ -230,6 +224,78 @@
                 <div class="row">
                     <div class="col-12 d-grid gap-2">
                         <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Actual Income Offcanvas -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="actualIncomeOffcanvas" aria-labelledby="addLogLabel">
+        <div class="offcanvas-header">
+            <h5 id="actualIncomeLabel" class="offcanvas-title">Actual Income</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body mx-0 flex-grow-0" id="actualIncomeBody">
+            <form class="form-repeater" id="form-repeater">
+                @csrf
+                <div data-repeater-list="group-a">
+                    <div data-repeater-item>
+                        <div class="row">
+                            <div class="mb-3 col-lg-10 col-xl-10 col-10 mb-0 pe-0">
+                                <div class="input-group">
+                                    <span class="input-group-text">&#8369;</span>
+                                    <input class="form-control numeral-mask numeral-maxlength" type="text"
+                                        id="form-repeater-1-1" placeholder="Enter Actual Income" maxlength="10"
+                                        autocomplete="off" name="actual_income" />
+                                </div>
+                            </div>
+                            <div class="mb-3 col-lg-2 col-xl-2 col-2 mt-0">
+                                <button class="btn btn-sm btn-danger py-2" data-repeater-delete="">
+                                    <i class="bx bx-x me-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- <div class="row">
+                    <div class="col-12 pe-1">
+                        <div class="mb-0 float-end">
+                            <button class="btn btn-sm btn-primary py-2" data-repeater-create>
+                                <i class="bx bx-plus me-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-12 pe-0">
+                        <div class="mb-0">
+                            <hr>
+                        </div>
+                    </div>
+                </div> --}}
+                <div class="row">
+                    <div class="mb-3 col-lg-10 col-xl-10 col-10 mb-0 pe-0">
+                        <label class="form-label">Total Actual Income</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-primary"
+                                style="font-weight: 400; color: white; border-color:rgba(0,0,0,0);">&#8369;</span>
+                            <input class="form-control numeral-mask bg-primary" type="text" id="total_actual_income"
+                                placeholder="Total Actual Income" autocomplete="off" name="actual_income" disabled
+                                value="1000" style="font-weight: 600; color: white; border-color:rgba(0,0,0,0);" />
+                        </div>
+                    </div>
+                    <div class="mb-3 col-lg-2 col-xl-2 col-2 mt-1">
+                        <button class="btn btn-sm btn-primary mt-4 py-2" data-repeater-create>
+                            <i class="bx bx-plus me-1"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-12 pe-1">
+                        <div class="mb-0 d-grid gap-2">
+                            <button class="btn btn-dark" type="submit">
+                                <span class="align-middle">SAVE</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>

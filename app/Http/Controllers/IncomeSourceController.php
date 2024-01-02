@@ -15,7 +15,7 @@ class IncomeSourceController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return (new IncomeSourceService())->incomeSourceDatatable();
+            return (new IncomeSourceService())->incomeSourceDatatable($request);
         }
 
         $categories = IncomeCategory::all();

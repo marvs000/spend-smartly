@@ -5,16 +5,20 @@ namespace App\Http\Services;
 use DataTables;
 use App\Models\IncomeSource;
 
-class IncomeSourceService 
+class IncomeSourceService
 {
-    public function incomeSourceDatatable()
+    public function incomeSourceDatatable($request)
     {
-        $data = IncomeSource::with('category')
-                ->with('type')
-                ->withSum('actual_incomes', 'amount')
-                ->get();
 
-        return DataTables::of($data)
+        $data = IncomeSource::with('category')
+            ->with('type')
+            ->withSum('actual_incomes', 'amount')
+            ->whereRaw('YEAR(income_date) = COALESCE(?, YEAR(CURDATE()))', [$request->year])
+            ->whereRaw('MONTH(income_date) = COALESCE(?, MONTH(CURDATE()))', [$request->month]);
+            // ->ddRawSql();
+            // ->get();
+
+        return DataTables::eloquent($data)
             ->addColumn('category', function (IncomeSource $source) {
                 return $source->category->title;
             })
@@ -23,14 +27,16 @@ class IncomeSourceService
             })
             ->addColumn('action', function ($row) {
                 $actions = '
-                    <div class="dropdown">
-                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                            data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal"
-                                data-bs-target="#add-income-logs" data-id="'. $row->id .'"><i class="bx bx-show-alt me-1"></i> View</a>
-                        </div>
-                    </div>';
+                    <div class="d-inline-block text-nowrap">
+                        <span class="action-tooltip" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="left" title="Edit">
+                            <button class="btn btn-sm btn-icon edit-log" data-id="' . $row->id . '" data-bs-toggle="offcanvas"
+                            data-bs-target="#incomeLogOffcanvas" aria-controls="editLog"><i class="bx bx-edit"></i></button>
+                        </span>
+                        <span class="action-tooltip" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="right" title="Delete">
+                            <button class="btn btn-sm btn-icon delete-log" data-id="' . $row->id . '"><i class="bx bx-trash"></i></button>
+                        </span>
+                    </div>
+                ';
                 return $actions;
             })
             ->toJson();
