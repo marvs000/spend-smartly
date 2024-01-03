@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/toastr/toastr.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 @endsection
 
 @section('vendor-script')
@@ -22,12 +23,16 @@
     <script src="{{ asset('assets/vendor/libs/moment/moment.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/toastr/toastr.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/jquery-repeater/jquery-repeater.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 @endsection
 
 @section('page-style')
     <style>
         td {
             font-size: 0.9rem;
+        }
+        .highlight-row {
+            background-color: #FFFF99; /* Change this to your desired highlight color */
         }
     </style>
 @endsection
@@ -81,7 +86,7 @@
                         class="text-xl-end text-lg-start text-md-end text-start d-flex align-items-center justify-content-end flex-md-row flex-column mb-3 mb-md-0">
                         <div data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
                             title="<i class='bx bx-plus bx-xs' ></i> <span>Log Income</span>">
-                            <button class="btn btn-primary add-log" type="button" data-bs-toggle="offcanvas"
+                            <button class="btn btn-primary add-log open-form-btn" data-oc-trigger="add-log" type="button" data-bs-toggle="offcanvas"
                                 data-bs-target="#incomeLogOffcanvas" aria-controls="addLog">
                                 <i class="bx bx-plus mb-1"></i>
                             </button>
@@ -164,11 +169,11 @@
     <!-- Income Log Offcanvas -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="incomeLogOffcanvas" aria-labelledby="addLogLabel">
         <div class="offcanvas-header">
-            <h5 id="addLogLabel" class="offcanvas-title">Add New Income Log</h5>
+            <h5 id="incomeLogTitle" class="offcanvas-title">Add New Income Log</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body mx-0 flex-grow-0" id="add-log-body">
-            <form id="addNewLogForm" class="add-log needs-validation" novalidate>
+            <form id="incomeLogForm" class="income-log-form needs-validation" novalidate>
                 @csrf
                 <div class="mb-3">
                     <label class="form-label" for="bs-validation-date">Income Date</label>
@@ -178,9 +183,9 @@
                     <div class="invalid-feedback"> Please Enter Income Date </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="bs-validation-category">Category</label>
-                    <select class="form-select select2" id="bs-validation-category" name="income_category" required>
-                        <option disabled selected>Select Category</option>
+                    <label class="form-label" for="income_category">Category</label>
+                    <select class="form-select select2" id="income_category" name="income_category" required>
+                        <option disabled selected value="default">Select Category</option>
                         @foreach ($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->title }}</option>
                         @endforeach
@@ -189,9 +194,9 @@
                     <div class="invalid-feedback"> Please select any Category </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="bs-validation-type">Income Type</label>
-                    <select class="form-select select2" id="bs-validation-type" name="income_type" required>
-                        <option value="" disabled selected>Select Income Type</option>
+                    <label class="form-label" for="income_type">Income Type</label>
+                    <select class="form-select select2" id="income_type" name="income_type" required>
+                        <option disabled selected value="default">Select Income Type</option>
                         @foreach ($types as $type)
                             <option value="{{ $type->id }}">{{ $type->title }}</option>
                         @endforeach

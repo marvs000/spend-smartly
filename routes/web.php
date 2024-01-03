@@ -34,9 +34,9 @@ Route::middleware(['guest'])->group(function () {
         Route::prefix('logs')->group(function () {
             Route::get('/', [IncomeSourceController::class, 'index'])->name('income-logs');
             Route::post('/store', [IncomeSourceController::class, 'store'])->name('income-logs-store');
-            Route::get('/edit', [IncomeSourceController::class, 'edit'])->name('income-logs-edit');
-            Route::put('/update', [IncomeSourceController::class, 'update'])->name('income-logs-update');
-            Route::delete('/delete', [IncomeSourceController::class, 'delete'])->name('income-logs-delete');
+            Route::get('/edit/{id}', [IncomeSourceController::class, 'edit'])->name('income-logs-edit');
+            Route::put('/update/{id}', [IncomeSourceController::class, 'update'])->name('income-logs-update');
+            Route::delete('/delete/{id}', [IncomeSourceController::class, 'delete'])->name('income-logs-delete');
         });
         Route::get('/setup', [IncomeSetupController::class, 'index'])->name('income-setup');
         // Route::prefix('setup')->group(function () {

@@ -29,14 +29,28 @@ class IncomeSourceController extends Controller
 
     public function store(Request $request)
     {
-        $income_source_inputs = $request->except(['actual_income']);
-        $source = IncomeSource::create($income_source_inputs);
+        $source = IncomeSource::create($request->all());
 
-        $actual_income_input = $request->only(['actual_income']);
-        $actual_income = ActualIncomeBreakdown::create([
-            'income_source_id' => $source->id,
-            'amount' => $actual_income_input['actual_income'],
-        ]);
+        return response()->json([ 'result' => $source ]);
+    }
+
+    public function edit($id)
+    {
+        $source = IncomeSource::find($id);
+
+        return response()->json([ 'result' => $source ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $source = IncomeSource::find($id)->update($request->all());
+
+        return response()->json([ 'result' => $source ]);
+    }
+
+    public function delete($id)
+    {
+        $source = IncomeSource::find($id)->delete();
 
         return response()->json([ 'result' => $source ]);
     }

@@ -22,12 +22,8 @@ class IncomeSource extends Model
         'income_type',
         'expected_income',
         'actual_income',
+        'actual_income',
     ];
-
-    public function actual_incomes(): HasMany
-    {
-        return $this->hasMany(ActualIncomeBreakdown::class);
-    }
 
     public function category(): HasOne
     {
