@@ -2,11 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\Authentication\LoginController;
-use App\Http\Controllers\IncomeCategoryController;
-use App\Http\Controllers\IncomeSourceController;
-use App\Http\Controllers\IncomeTypeController;
+use App\Http\Controllers\BudgetLogController;
+use App\Http\Controllers\BudgetSetupController;
 use App\Http\Controllers\IncomeSetupController;
+use App\Http\Controllers\IncomeSourceController;
+use App\Http\Controllers\BudgetAllocationController;
+use App\Http\Controllers\Authentication\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,10 +40,18 @@ Route::middleware(['guest'])->group(function () {
             Route::delete('/delete/{id}', [IncomeSourceController::class, 'delete'])->name('income-logs-delete');
         });
         Route::get('/setup', [IncomeSetupController::class, 'index'])->name('income-setup');
-        // Route::prefix('setup')->group(function () {
-        //     Route::get('/category', [IncomeCategoryController::class, 'index'])->name('income-setup-category');
-        //     Route::get('/type', [IncomeTypeController::class, 'index'])->name('income-setup-type');
-        // });
+    });
+
+    Route::prefix('budget')->group(function () {
+        Route::prefix('logs')->group(function () {
+            Route::get('/', [BudgetLogController::class, 'index'])->name('budget-logs');
+        });
+        Route::prefix('allocation')->group(function () {
+            Route::get('/', [BudgetAllocationController::class, 'index'])->name('budget-allocation');
+        });
+        Route::prefix('setup')->group(function () {
+            Route::get('/', [BudgetSetupController::class, 'index'])->name('budget-setup');
+        });
     });
 });
 // Route::get('/auth/register-basic', $controller_path . '\Authentication\RegisterBasic@index')->name('auth-register-basic');

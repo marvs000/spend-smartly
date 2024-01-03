@@ -13,7 +13,23 @@
       "name": "Budget",
       "icon": "menu-icon tf-icons bx bx-coin",
       "slug": "budget",
-      "url": "/budget"
+      "submenu": [
+        {
+          "url": "/budget/logs",
+          "name": "Budget Logs",
+          "slug": "budget-logs"
+        },
+        {
+          "url": "/budget/allocation",
+          "name": "Budget Allocation",
+          "slug": "budget-allocation"
+        },
+        {
+          "url": "/budget/setup",
+          "name": "Setup",
+          "slug": "budget-setup"
+        }
+      ]
     },
     {
       "name": "Income",
